@@ -41,14 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
-		http.csrf().disable().cors().disable().authorizeRequests()
-		.antMatchers("/create", "/allusers").permitAll().
-		
-		antMatchers("/token").permitAll()
-		.anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	    http.csrf().disable()
+	        .cors().disable()
+	        .authorizeRequests()
+	            .antMatchers("/create").permitAll()
+	            .antMatchers("/token").permitAll()
+	            .antMatchers("/allusers").hasRole("ADMIN") // Endpoint for admin
+	            .anyRequest().authenticated()
+	            .and()
+	            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+	    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean

@@ -1,7 +1,5 @@
 package jwt.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +39,24 @@ public class HomeController {
 	@GetMapping("/allusers")
 	public ResponseEntity<?> getAll() {
 		return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin")
+	public ResponseEntity<?> admin() {
+		try {
+			return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("You are not authorized", HttpStatus.OK);
+		}
+		
+	}
+	
+	@GetMapping("/user")
+	public ResponseEntity<?> user() {
+		try {
+			return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("You are not authorized", HttpStatus.OK);
+		}
 	}
 }

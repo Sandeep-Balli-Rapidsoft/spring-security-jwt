@@ -1,16 +1,22 @@
 package jwt.entity;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import jwt.utils.Role;
 
 @Table(name = "user")
 @Entity
@@ -25,6 +31,10 @@ public class User implements UserDetails {
 	
 	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
 	@Column(name = "password")
 	private String password;
@@ -53,6 +63,14 @@ public class User implements UserDetails {
 		this.email = email;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -61,10 +79,11 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
-	public User(String name, String email, String password) {
+	public User(String name, String email, Role role, String password) {
 		super();
 		this.name = name;
 		this.email = email;
+		this.role = role;
 		this.password = password;
 	}
 
@@ -76,7 +95,8 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.name());
+		return Collections.singleton(authority);
 	}
 
 	@Override
